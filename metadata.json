@@ -1,0 +1,10 @@
+{
+  "name": "Remix BedLink - Emergency Care \u0026 Bed Network",
+  "description": "Streamlined emergency bed booking, real-time nurse triage queue, blood requirement dispatch, and live request tracking.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
