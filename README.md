@@ -1,77 +1,50 @@
 # BedLink 🚑🏥
 
-A healthcare emergency coordination platform designed to connect patients, ambulance crews, and hospitals during critical situations. BedLink helps users identify suitable hospitals based on bed availability and enables hospital staff to manage and update hospital resources.
+A healthcare emergency coordination platform that connects patients, ambulance crews, and hospitals during critical situations. BedLink helps users find a suitable hospital based on live bed availability, and lets hospital staff keep that information up to date.
 
 ---
 
 ## 1. Project Overview
 
-**BedLink** is a healthcare emergency coordination platform developed to improve communication and coordination between patients, ambulance personnel, and hospitals during medical emergencies.
+**BedLink** improves communication and coordination between patients, ambulance personnel, and hospitals during medical emergencies.
 
-Finding a hospital with the required bed or ICU availability can be difficult and time-consuming during emergencies. BedLink provides a centralized platform where hospital availability can be managed and accessed by relevant users.
+Finding a hospital with the required bed or ICU availability can be slow and stressful. BedLink provides a centralized platform where hospital availability is stored in a database, managed by hospital staff, and accessed by the people who need it.
 
-The platform includes dedicated interfaces for patients, hospital staff, ambulance personnel, and government/NGO healthcare monitoring.
+The platform includes dedicated interfaces for patients, hospital (nurse) staff, ambulance drivers, and administrators. The current dataset covers hospitals along the Mumbai Western Line railway corridor.
 
 ### Main Objectives
 
-- Reduce the time required to find suitable hospitals during emergencies.
-- Provide information about hospital bed and ICU availability.
-- Help ambulance personnel identify appropriate hospitals.
-- Allow hospital staff to update bed availability.
+- Reduce the time required to find a suitable hospital during an emergency.
+- Show hospital bed, ICU, ventilator, and blood bank availability.
+- Help ambulance personnel pick the right hospital quickly.
+- Allow hospital staff to update bed availability in real time.
 - Provide a simplified emergency access flow.
-- Improve coordination between different healthcare stakeholders.
+- Improve coordination between patients, ambulances, and hospitals.
 
 ---
 
 ## 2. Problem Statement
 
-During medical emergencies, patients and ambulance crews often face difficulties in finding hospitals with available beds or ICU facilities.
+During medical emergencies, patients and ambulance crews often struggle to find hospitals with available beds or ICU facilities.
 
-The process of calling multiple hospitals and manually checking availability can result in delays in emergency treatment.
+Calling multiple hospitals and manually checking availability costs valuable time and can delay treatment. Existing systems rarely provide one platform that connects patients, ambulance crews, hospital staff, and monitoring authorities.
 
-Existing healthcare systems may not provide a centralized platform that simultaneously connects patients, ambulance crews, hospital staff, and healthcare monitoring authorities.
-
-**BedLink** addresses this problem by providing a centralized emergency coordination platform for accessing and managing hospital availability information.
+**BedLink** addresses this by providing a centralized emergency coordination platform for accessing and managing hospital availability.
 
 ---
 
 ## 3. Key Features
 
-### 🚑 Ambulance Dispatch
-
-Helps ambulance personnel identify suitable hospitals for emergency patients based on available facilities and bed information.
-
-### 🏥 Hospital Bed Availability
-
-Displays hospital bed and ICU availability to help users identify suitable healthcare facilities.
-
-### 👨‍⚕️ Nurse / Hospital Dashboard
-
-Allows authorized hospital staff to update and manage hospital bed availability.
-
-### 🧑‍⚕️ Patient Portal
-
-Provides patients with access to emergency healthcare information and available hospital details.
-
-### 🚨 Emergency Bypass
-
-Provides a simplified emergency flow for critical situations where quick access to healthcare services is required.
-
-### 🏛️ Government / NGO Portal
-
-Provides a dedicated interface for healthcare monitoring and coordination.
-
-### 📱 SMS Fallback
-
-Provides an alternative communication mechanism for emergency situations where normal application-based communication may not be available.
-
-### 🔄 Bed Availability Updates
-
-Hospital staff can update bed and ICU information as availability changes.
-
-### 📱 Responsive Interface
-
-The application is designed to provide a user-friendly experience across different screen sizes.
+- 🚑 **Ambulance Dispatch** – Helps ambulance crews identify suitable hospitals based on facilities and bed availability, with an ambulance tracker view.
+- 🏥 **Hospital Bed Availability** – Shows ICU, ventilator, oxygen, trauma, burns, and regular bed counts per hospital.
+- 👨‍⚕️ **Nurse / Hospital Dashboard** – Lets authorized hospital staff update bed and blood bank availability.
+- 🧑‍⚕️ **Patient Portal** – Gives patients access to emergency information and hospital details.
+- 🚨 **Emergency Requests** – A simplified flow for critical cases, with request tracking.
+- 🏛️ **Administrator View** – Dashboard with statistics, hospital management, and database tools.
+- 📴 **Offline Emergency Mode** – Fallback flow for situations with poor connectivity.
+- 🌐 **Multi-language Support** – Translations for a wider range of users.
+- 💾 **Persistent Database** – All hospital, request, and patient data is stored in SQLite.
+- 📱 **Responsive Interface** – Works across different screen sizes.
 
 ---
 
@@ -79,19 +52,24 @@ The application is designed to provide a user-friendly experience across differe
 
 ### Frontend
 
-- React
+- React 19
 - TypeScript
 - Vite
 - Tailwind CSS
-- Lucide React
+- Lucide React (icons)
+- Motion (animations)
 
 ### Backend
 
--Express and SQLite
+- Node.js
+- Express (REST API, `server.ts`)
+- tsx (runs TypeScript directly)
 
 ### Database
 
-- SQL / MySQL
+- SQLite, accessed through `sql.js`
+- Data is stored in the `bedlink.sqlite` file in the project root
+- Schema and seed data: `src/db/schema.sql` and `src/data/westernLineHospitals.ts`
 
 ### Development Tools
 
@@ -114,208 +92,214 @@ The application is designed to provide a user-friendly experience across differe
                          │  TypeScript + Vite   │
                          └──────────┬───────────┘
                                     │
-                              API Requests
+                           fetch('/api/...')
                                     │
                                     ▼
                          ┌──────────────────────┐
-                         │   Django Backend     │
-                         │    REST APIs         │
+                         │   Express Backend    │
+                         │   REST APIs          │
+                         │   (server.ts)        │
                          └──────────┬───────────┘
                                     │
                                     ▼
                          ┌──────────────────────┐
-                         │    SQL Database      │
-                         │ Hospital / Bed Data  │
+                         │   SQLite Database    │
+                         │   (bedlink.sqlite)   │
                          └──────────────────────┘
-pplication Workflow
-The user opens the BedLink application.
-The user selects the required service or portal.
-Patients can access emergency healthcare and hospital information.
-Ambulance personnel can identify suitable hospitals.
-Hospital staff can update bed and ICU availability.
-Frontend requests are sent to the backend through APIs.
-The backend processes the requests and communicates with the database.
-Updated information is returned to the frontend.
-Relevant hospital and emergency information is displayed to the user.
-6. Dataset / API Information
+```
 
-BedLink works with hospital and emergency healthcare information.
+### Application Workflow
 
-The system is designed to handle information such as:
+1. The user opens the BedLink application.
+2. The user logs in or selects the required portal.
+3. Patients can view emergency information and hospital availability.
+4. Ambulance crews can identify suitable hospitals and send emergency requests.
+5. Hospital staff can update bed and blood bank availability.
+6. The frontend sends requests to the Express backend through the `/api` routes.
+7. The backend reads from and writes to the SQLite database.
+8. Updated information is returned to the frontend and displayed to the user.
 
-Hospital details
-Hospital location
-Available beds
-ICU availability
-Patient emergency information
-Ambulance information
-Hospital staff updates
-Hospital resource availability
-API
+In development, a single Express server serves both the API and the Vite frontend, so everything runs on one port.
 
-The backend provides REST APIs for communication between the frontend and database.
+---
 
-The APIs are intended to support operations such as:
+## 6. Dataset / API Information
 
-Retrieving hospital information
-Checking bed availability
-Updating bed availability
-Managing emergency information
-Communicating between user interfaces and backend services
+### Data
 
-The current prototype may use sample or simulated hospital availability data for demonstration purposes.
+BedLink stores the following information:
 
-7. Setup & Installation Instructions
+- Hospital details, location, and nearest railway station
+- ICU, ventilator, oxygen, trauma, burns, and regular bed availability
+- Blood bank inventory by blood group
+- Doctors and ambulances linked to each hospital
+- Emergency requests and patient records
+- User login logs
 
-Follow the steps below to run BedLink locally.
+The prototype ships with seeded sample data for 16 hospitals along the Western Line. This data is for demonstration purposes only.
 
-Prerequisites
+### REST API
 
-Make sure the following software is installed:
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/health` | Health check |
+| GET | `/api/hospitals` | List all hospitals |
+| GET | `/api/hospitals/:id` | Get one hospital |
+| POST | `/api/hospitals` | Add a hospital |
+| DELETE | `/api/hospitals/:id` | Delete a hospital |
+| PATCH | `/api/hospitals/:id/beds` | Update bed availability |
+| PATCH | `/api/hospitals/:id/blood` | Update blood bank inventory |
+| GET / POST | `/api/requests` | List / create emergency requests |
+| PATCH | `/api/requests/:id/sla` | Update request SLA |
+| GET / POST | `/api/patient-records` | List / create patient records |
+| GET | `/api/patient-records/:id` | Get one patient record |
+| PATCH | `/api/patient-records/:id/confirm` | Confirm a patient record |
+| PATCH | `/api/patient-records/:id/discharge` | Discharge a patient |
+| GET / POST | `/api/user-logs` | List / create login logs |
+| GET | `/api/admin/stats` | Admin statistics |
+| POST | `/api/admin/sql` | Run SQL from the admin view |
+| POST | `/api/admin/reset` | Reset database to default data |
 
-Node.js v18 or higher
-npm
-Python 3.x
-Git
-MySQL / SQL Database
-Visual Studio Code
-Step 1: Clone the Repository
-git clone <your-repository-url>
+---
 
-Navigate into the project directory:
+## 7. Setup & Installation Instructions
 
-cd <your-project-folder>
-Step 2: Install Frontend Dependencies
+### Prerequisites
 
-Run:
+- Node.js v18 or higher
+- npm
+- Git
 
+No separate database installation is needed. SQLite runs inside the app.
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/KRUNALIKOLI125/Hack-n-Coders-bedlink.git
+cd Hack-n-Coders-bedlink
+```
+
+### Step 2: Install Dependencies
+
+```bash
 npm install
-Step 3: Configure Environment Variables
+```
 
-Create a .env file in the required project directory.
+### Step 3: (Optional) Configure Environment Variables
 
-Example:
+The app runs without a `.env` file. To change settings, copy the example file:
 
-APP_URL=http://localhost:5173
+```bash
+cp .env.example .env
+```
 
-Add the required backend and database configuration according to the project setup.
+On Windows Command Prompt, use `copy .env.example .env`.
 
-Step 4: Start the Frontend
+By default the server runs on port `3000`. You can change it by setting `PORT` in your `.env` file.
 
-Run:
+### Step 4: Start the App
 
+```bash
 npm run dev
+```
 
-The frontend will normally be available at:
+This starts the Express backend and the Vite frontend together. You should see a message that the SQLite database was initialized.
 
-http://localhost:5173
-Step 5: Start the Backend
-
-Navigate to the Django backend directory:
-
-cd backend
-
-Run the Django development server:
-
-python manage.py runserver
-
-The backend will normally be available at:
-
-http://127.0.0.1:8000
-Step 6: Open the Application
+### Step 5: Open the Application
 
 Open your browser and visit:
 
-http://localhost:5173
+```
+http://localhost:3000
+```
 
-##8. Screenshots / Demo
+### Other Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Build the frontend for production |
+| `npm run start` | Start the server |
+| `npm run lint` | Type-check the project |
+
+### Troubleshooting
+
+- **PowerShell says "running scripts is disabled"**: run `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`, or use Command Prompt instead.
+- **Port already in use**: stop the other process, or set a different `PORT` in `.env`.
+- **Data looks outdated in the browser**: clear the site data for `localhost:3000`, since the frontend keeps a local cache of hospital data.
+
+---
+
+## 8. Screenshots / Demo
+
 https://drive.google.com/drive/folders/1HW8z0Vzk6xVjoX-cUkCDiW6qMtX3qr8X?usp=sharing
-9. Limitations & Future Scope
-Limitations
-Hospital availability depends on the accuracy and frequency of updates provided by hospital staff.
-Real-world hospital data integration requires authorized access to hospital systems.
-The current prototype may use sample or simulated hospital availability data.
-SMS functionality requires integration with an external SMS service provider.
-Real-world deployment would require strong authentication and authorization mechanisms.
-Healthcare applications require additional security and privacy measures for sensitive information.
-The prototype may not represent the complete infrastructure required for large-scale deployment.
-Future Scope
-Real-Time Hospital Integration
 
-Integrate BedLink with hospital management systems to obtain real-time bed and ICU availability.
+---
 
-GPS-Based Ambulance Tracking
+## 9. Limitations & Future Scope
 
-Add GPS functionality to track ambulances and identify nearby hospitals.
+### Limitations
 
-Intelligent Hospital Recommendation
+- Hospital availability depends on how accurate and frequent staff updates are.
+- Real-world hospital data integration requires authorized access to hospital systems.
+- The prototype uses sample hospital data for demonstration.
+- The database is a single local file (`bedlink.sqlite`), which suits a prototype but not a multi-server deployment.
+- SMS functionality requires integration with an external SMS provider.
+- Real-world deployment would need strong authentication, authorization, and protection of the admin endpoints.
+- Healthcare applications require additional security and privacy measures for sensitive patient information.
 
-Develop a recommendation system that considers:
+### Future Scope
 
-Required medical facility
-Bed availability
-ICU availability
-Distance
-Emergency requirements
-Authentication & Role-Based Access
+- **Real-time hospital integration** with hospital management systems.
+- **GPS-based ambulance tracking** to find nearby hospitals.
+- **Intelligent hospital recommendation** based on required facility, bed availability, ICU availability, distance, and emergency type.
+- **Authentication and role-based access control** for patients, nurses, doctors, ambulance personnel, government authorities, and administrators.
+- **SMS and push notifications** for emergency alerts.
+- **Mobile applications** for patients and ambulance crews.
+- **Government healthcare integration** with authorized systems.
+- **Cloud deployment** with a production database for scalability and availability.
 
-Implement secure authentication and role-based access control for:
+---
 
-Patients
-Nurses
-Doctors
-Ambulance personnel
-Government authorities
-Administrators
-SMS / Emergency Notifications
+## 10. Project Structure
 
-Integrate SMS and notification services for emergency alerts and communication.
-
-Mobile Application
-
-Develop dedicated mobile applications for patients and ambulance personnel.
-
-Government Healthcare Integration
-
-Integrate with authorized government healthcare systems for wider healthcare coordination.
-
-Cloud Deployment
-
-Deploy the application on cloud infrastructure to support scalability and availability.
-
-10. Project Structure
-BedLink/
+```text
+Hack-n-Coders-bedlink/
 │
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── data/
-│   │   ├── types/
-│   │   ├── utils/
-│   │   ├── App.tsx
-│   │   ├── main.tsx
-│   │   └── index.css
-│   │
-│   ├── package.json
-│   └── index.html
+├── src/
+│   ├── components/        # UI views (Nurse, Ambulance, Admin, Login, etc.)
+│   ├── context/           # EmergencyContext (app state + API calls)
+│   ├── data/              # Hospital seed data and translations
+│   ├── db/                # SQLite layer (database.ts) and schema.sql
+│   ├── assets/            # Images
+│   ├── App.tsx
+│   ├── main.tsx
+│   ├── types.ts
+│   └── index.css
 │
-├── backend/
-│   ├── manage.py
-│   ├── ...
-│
+├── server.ts              # Express backend and API routes
+├── bedlink.sqlite         # SQLite database file
+├── index.html
+├── vite.config.ts
+├── tsconfig.json
+├── package.json
+├── .env.example
 ├── README.md
-├── LICENSE
-└── .gitignore
+└── LICENSE
+```
 
-The exact project structure may vary depending on the final repository organization.
+---
 
-11. Team Members
-Team Name
+## 11. Team Members
 
-Hack-n-Coders
+**Team Name:** Hack-n-Coders
 
-Team Members
-[Palak shukla]
-[nikita sequeira]
-[krunali koli]
-[Roby Roby Koyichirayil]
+- Palak Shukla
+- Nikita Sequeira
+- Krunali Koli
+- Roby Koyichirayil
+
+---
+
+## License
+
+This project is licensed under the terms of the LICENSE file included in this repository.
