@@ -87,8 +87,7 @@ The application is designed to provide a user-friendly experience across differe
 
 ### Backend
 
-- Django
-- Django REST Framework
+-Express and SQLite
 
 ### Database
 
